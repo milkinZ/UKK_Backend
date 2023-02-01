@@ -89,9 +89,9 @@ app.put("/", upload.single("gambar"), async (req, res) => {
     }
     if (req.file) {
         // get data by id
-        const row = loker.findOne({ where: param })
+        const row = menu.findOne({ where: param })
             .then(result => {
-                let oldFileName = result.img
+                let oldFileName = result.gambar
 
                 // delete old file
                 let dir = path.join(__dirname, "../img", oldFileName)
@@ -118,13 +118,21 @@ app.put("/", upload.single("gambar"), async (req, res) => {
 })
 
 app.delete("/:id", async (req, res) => {
-    let param = {
-        id_menu: req.params.id
-    }
-    menu.destroy({ where: param })
+    try {
+        let param = { id_menu: req.params.id}
+        let result = await menu.findOne({where: param})
+        let oldFileName = result.gambar
+           
+        // delete old file
+        let dir = path.join(__dirname,"../img",oldFileName)
+        fs.unlink(dir, err => console.log(err))
+  
+        // delete data
+        menu.destroy({where: param})
         .then(result => {
+           
             res.json({
-                message: "Data Berhasil Dihapus"
+                message: "data berhasil dihapus",
             })
         })
         .catch(error => {
@@ -132,5 +140,12 @@ app.delete("/:id", async (req, res) => {
                 message: error.message
             })
         })
-})
+  
+    } catch (error) {
+        res.json({
+            message: error.message
+        })
+    }
+  })
+  
 module.exports = app

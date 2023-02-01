@@ -44,7 +44,7 @@ app.post("/", async (req, res) => {
     meja.create(data)
         .then(result => {
             res.json({
-                message: "Data Berhasil Ditambahkan",
+                  message: "Data Berhasil Ditambahkan",
                 data: result
             })
         })

@@ -12,11 +12,8 @@ app.use("/kasir_kafe/menu", menu)
 const meja =require("./router/meja")
 app.use("/kasir_kafe/meja", meja)
 
-const transaksi = require("./router/transaksi")
-app.use("/kasir_kafe/transaksi", transaksi)
-
-const detail_transaksi = require("./router/detail_transaksi")
-app.use("/kasir_kafe/detail_transaksi", detail_transaksi)
+const pemesanan = require("./router/pemesanan")
+app.use("/kasir_kafe/pemesanan", pemesanan)
 
 app.listen(4040, () => {
     console.log("Server run on port 4040")

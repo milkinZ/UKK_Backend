@@ -22,7 +22,7 @@ module.exports = {
           key:"id_menu"
         }
       },
-      harga: {
+      qty: {
         type: Sequelize.INTEGER
       },
       createdAt: {
