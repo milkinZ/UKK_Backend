@@ -39,7 +39,7 @@ app.get("/:id", async (req, res) => {
 app.post("/", async (req, res) => {
     let data = {
         nomor_meja: req.body.nomor_meja,
-        status_meja: req.body.status_meja
+        status_meja: "tersedia"
     }
     meja.create(data)
         .then(result => {
