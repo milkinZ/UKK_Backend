@@ -31,6 +31,9 @@ module.exports = {
       status: {
         type: Sequelize.ENUM('belum_bayar','lunas')
       },
+      jenis_pesanan: {
+        type: Sequelize.ENUM('ditempat','bungkus')
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

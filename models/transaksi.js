@@ -37,7 +37,8 @@ module.exports = (sequelize, DataTypes) => {
     id_user: DataTypes.INTEGER,
     id_meja: DataTypes.INTEGER,
     nama_pelanggan: DataTypes.STRING,
-    status: DataTypes.ENUM('belum_bayar','lunas')
+    status: DataTypes.ENUM('belum_bayar','lunas'),
+    jenis_pesanan: DataTypes.ENUM('ditempat','bungkus')
   }, {
     sequelize,
     modelName: 'transaksi',
