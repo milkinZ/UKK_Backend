@@ -85,7 +85,7 @@ app.post("/", async (req, res) => {
         id_user: req.body.id_user,
         id_meja: req.body.id_meja,
         nama_pelanggan: req.body.nama_pelanggan,
-        status: 'belum_bayar',
+        status: req.body.status,
         jenis_pesanan: req.body.jenis_pesanan
     }
     transaksi.create(data_transaksi)
