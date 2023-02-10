@@ -96,9 +96,15 @@ app.post("/", async (req, res) => {
                 element.id_transaksi = lastID
             });
             detail_transaksi.bulkCreate(detail)
-            res.json({
-                message: "Data Berhasil Ditambahkan",
-                data: result
+            .then(result => {
+                res.json({
+                    message: "Data Berhasil Ditambahkan",
+                })
+            })
+            .catch(error => {
+                res.json({
+                    message: error.message
+                })
             })
         })
         .catch(error => {
