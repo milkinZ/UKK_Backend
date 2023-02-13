@@ -5,6 +5,9 @@ const multer = require("multer")
 const path = require("path")
 const fs = require("fs")
 
+const auth = require("../auth")
+const SECRET_KEY = "INIPUNYAKASIR"
+
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
@@ -18,7 +21,7 @@ const storage = multer.diskStorage({
 })
 let upload = multer({ storage: storage })
 
-app.get("/", async (req, res) => {
+app.get("/",auth, async (req, res) => {
     menu.findAll()
         .then(result => {
             res.json({
@@ -32,7 +35,7 @@ app.get("/", async (req, res) => {
         })
 })
 
-app.get("/:id", async (req, res) => {
+app.get("/:id",auth, async (req, res) => {
     let param = {
         id_menu: req.params.id
     }
@@ -49,7 +52,7 @@ app.get("/:id", async (req, res) => {
         })
 })
 
-app.post("/", upload.single("gambar"), async (req, res) => {
+app.post("/", upload.single("gambar"),auth, async (req, res) => {
     if (!req.file) {
         res.json({
             message: "File Tidak Ada!"
@@ -77,7 +80,7 @@ app.post("/", upload.single("gambar"), async (req, res) => {
     }
 })
 
-app.put("/", upload.single("gambar"), async (req, res) => {
+app.put("/", upload.single("gambar"),auth, async (req, res) => {
     let param = {
         id_menu: req.body.id_menu
     }
@@ -117,7 +120,7 @@ app.put("/", upload.single("gambar"), async (req, res) => {
         })
 })
 
-app.delete("/:id", async (req, res) => {
+app.delete("/:id",auth, async (req, res) => {
     try {
         let param = { id_menu: req.params.id}
         let result = await menu.findOne({where: param})

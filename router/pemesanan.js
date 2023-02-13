@@ -4,10 +4,13 @@ const moment = require("moment")
 const transaksi = require("../models/index").transaksi
 const detail_transaksi = require("../models/index").detail_transaksi
 
+const auth = require("../auth")
+const SECRET_KEY = "INIPUNYAKASIR"
+
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
-app.get("/detail", async (req, res) => {
+app.get("/detail",auth, async (req, res) => {
     detail_transaksi.findAll({
         include: ["transaksi", "menu"]
     })
@@ -23,7 +26,7 @@ app.get("/detail", async (req, res) => {
         })
 })
 
-app.get("/detail/:id", async (req, res) => {
+app.get("/detail/:id",auth, async (req, res) => {
     let param = {
         id_transaksi: req.params.id
     }
@@ -43,7 +46,7 @@ app.get("/detail/:id", async (req, res) => {
         })
 })
 
-app.get("/", async (req, res) => {
+app.get("/",auth, async (req, res) => {
     transaksi.findAll({
         include: ["user", "meja"]
     })
@@ -59,7 +62,7 @@ app.get("/", async (req, res) => {
         })
 })
 
-app.get("/:id", async (req, res) => {
+app.get("/:id",auth, async (req, res) => {
     let param = {
         id_transaksi: req.params.id
     }
@@ -79,7 +82,7 @@ app.get("/:id", async (req, res) => {
         })
 })
 
-app.post("/", async (req, res) => {
+app.post("/",auth, async (req, res) => {
     let data_transaksi = {
         tgl_transaksi: moment().format("YYYY-MM-DD"),
         id_user: req.body.id_user,
@@ -114,7 +117,7 @@ app.post("/", async (req, res) => {
         })
 })
 
-app.put("/", async (req, res) => {
+app.put("/",auth, async (req, res) => {
     let param = {
         id_transaksi: req.body.id_transaksi
     }
@@ -134,7 +137,7 @@ app.put("/", async (req, res) => {
         })
 })
 
-app.delete("/:id", async (req, res) => {
+app.delete("/:id",auth, async (req, res) => {
     let param = {
         id_transaksi: req.params.id
     }
