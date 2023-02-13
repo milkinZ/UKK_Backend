@@ -87,7 +87,7 @@ app.post("/", async (req, res) => {
         nama_pelanggan: req.body.nama_pelanggan,
         status: req.body.status,
         jenis_pesanan: req.body.jenis_pesanan
-    }
+    }  
     transaksi.create(data_transaksi)
         .then(result => {
             let lastID = result.id_transaksi
