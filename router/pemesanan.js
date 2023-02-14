@@ -137,7 +137,7 @@ app.put("/",auth, async (req, res) => {
         })
 })
 
-app.delete("/:id",auth, async (req, res) => {
+app.delete("/:id",auth,  async (req, res) => {
     let param = {
         id_transaksi: req.params.id
     }
