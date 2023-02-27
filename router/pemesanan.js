@@ -1,14 +1,25 @@
 const express = require("express")
 const app = express()
+const mysql = require("mysql")
 const moment = require("moment")
 const transaksi = require("../models/index").transaksi
 const detail_transaksi = require("../models/index").detail_transaksi
+const menu = require("../models/index").menu
+const meja = require("../models/index").meja
+const user = require("../models/index").user
 
 const auth = require("../auth")
 const SECRET_KEY = "INIPUNYAKASIR"
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
+
+const conn = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "kasir_kafe",
+  });
 
 app.get("/detail",auth, async (req, res) => {
     detail_transaksi.findAll({
@@ -46,6 +57,26 @@ app.get("/detail/:id",auth, async (req, res) => {
         })
 })
 
+app.get("/detail/menu/:id",auth, async (req, res) => {
+    let param = {
+        id_menu: req.params.id
+    }
+    detail_transaksi.findAll({
+        include: ["transaksi", "menu"],
+        where: param
+    })
+        .then(result => {
+            res.json({
+                data: result
+            })
+        })
+        .catch(error => {
+            res.json({
+                message: error.message
+            })
+        })
+})
+
 app.get("/",auth, async (req, res) => {
     transaksi.findAll({
         include: ["user", "meja"]
@@ -61,6 +92,39 @@ app.get("/",auth, async (req, res) => {
             })
         })
 })
+
+app.get("/riwayat/:status/:id",auth, async (req, res) => {
+    let param = {
+        status: req.params.status,
+        id_user: req.params.id
+    }
+    transaksi.findAll({
+        include: ["user", "meja"],
+        where: param
+    })
+        .then(result => {
+            res.json({
+                data: result
+            })
+        })
+        .catch(error => {
+            res.json({
+                message: error.message
+            })
+        })
+})
+app.get("/qtybymenu",auth, async (req, res) => {
+    conn.query(
+      "SELECT menu.id_menu, menu.nama_menu, SUM(detail_transaksi.qty) AS total_qty FROM menu JOIN detail_transaksi ON menu.id_menu = detail_transaksi.id_menu GROUP BY menu.id_menu",
+      (err, results, fields) => {
+        if (!err) {
+          res.send(results);
+        } else {
+          console.log(err);
+        }
+      }
+    );
+  });
 
 app.get("/:id",auth, async (req, res) => {
     let param = {
