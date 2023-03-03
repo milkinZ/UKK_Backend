@@ -35,6 +35,23 @@ app.get("/",auth, async (req, res) => {
         })
 })
 
+app.get("/jenis/:id",auth, async (req, res) => {
+    let param = {
+        jenis: req.params.id
+    }
+    menu.findAll({ where: param })
+        .then(result => {
+            res.json({
+                data: result
+            })
+        })
+        .catch(error => {
+            res.json({
+                message: error.message
+            })
+        })
+})
+
 app.get("/:id",auth, async (req, res) => {
     let param = {
         id_menu: req.params.id

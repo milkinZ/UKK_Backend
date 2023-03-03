@@ -27,7 +27,7 @@ app.get("/:id", auth, async (req, res) => {
     let param = {
         id_user: req.params.id
     }
-    user.findOne({ where: param })
+    user.findAll({ where: param })
         .then(result => {
             res.json({
                 data: result
