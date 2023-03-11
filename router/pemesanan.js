@@ -40,13 +40,14 @@ app.get("/detail", auth, async (req, res) => {
         })
 })
 
-app.get("/tanggal/:id", auth, async (req, res) => {
-    let param = {
-        id_transaksi: req.params.id
-    }
-    detail_transaksi.findAll({
-        include: ["transaksi", "menu"],
-        where: param
+app.get("/tanggal/:awal/:akhir", auth, async (req, res) => {
+    transaksi.findAll({
+        include: ["user", "meja"],
+        where: {
+            tgl_transaksi: {
+                [Op.between]: [req.params.awal, req.params.akhir],
+            }
+        }
     })
         .then(result => {
             res.json({
@@ -123,7 +124,7 @@ app.get("/user/:nama_user", auth, async (req, res) => {
         include: ["user", "meja"],
         where: {
             [Op.or]: [
-                {'$user.nama_user$': {[Op.like]: `%${param.nama_user}%`}}
+                { '$user.nama_user$': { [Op.like]: `%${param.nama_user}%` } }
             ]
         }
     })
@@ -239,6 +240,45 @@ app.post("/", auth, async (req, res) => {
                         message: error.message
                     })
                 })
+        })
+        .catch(error => {
+            res.json({
+                message: error.message
+            })
+        })
+})
+
+
+
+app.post("/detail/add", auth, async (req, res) => {
+    let detail = req.body.detail_transaksi
+    detail_transaksi.bulkCreate(detail)
+        .then(result => {
+            res.json({
+                message: "Data Berhasil Ditambahkan",
+                data: result
+            })
+        })
+        .catch(error => {
+            res.json({
+                message: error.message
+            })
+        })
+})
+
+app.put("/ubahqty", auth, async (req, res) => {
+    let param = {
+        id_transaksi: req.body.id_transaksi,
+        id_menu: req.body.id_menu
+    }
+    let data = {
+        qty: req.body.qty
+    }
+    detail_transaksi.update(data, { where: param })
+        .then(result => {
+            res.json({
+                message: "Data Berhasil Diperbarui"
+            })
         })
         .catch(error => {
             res.json({
